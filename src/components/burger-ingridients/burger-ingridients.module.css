@@ -1,0 +1,24 @@
+.content {
+  max-width: 600px;
+}
+
+.navigation {
+  display: flex;
+}
+
+.ingridients-lists {
+  max-height: calc(100vh - 384px);
+  overflow-y: auto;
+}
+
+.ingridients-lists::-webkit-scrollbar {
+  width: 8px;
+}
+
+.ingridients-lists::-webkit-scrollbar-track {
+  background: rgba(47, 47, 55, 1);
+}
+
+.ingridients-lists::-webkit-scrollbar-thumb {
+  background: rgba(133, 133, 173, 1);
+}

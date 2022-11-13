@@ -1,0 +1,15 @@
+.ingridient {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.details {
+  display: grid;
+  max-width: 520px;
+  grid-template-columns: 120px repeat(3, 112px);
+  grid-template-rows: repeat(2, auto);
+  text-align: center;
+  column-gap: 20px;
+  row-gap: 8px;
+}
