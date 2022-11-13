@@ -80,11 +80,10 @@ const BurgerConstructor = (props) => {
       </div>
 
       { modalIsOpen &&
-      <ModalOverlay closeModal={() => setModalIsOpen(false)}>
-        <Modal closeModal={() => setModalIsOpen(false)} title=''>
-          <OrderDetails />
-        </Modal>
-      </ModalOverlay>}
+      <Modal closeModal={() => setModalIsOpen(false)} title=''>
+        <OrderDetails />
+      </Modal>
+      }
     </section>
   )
 }

@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import IngridientMenuCard from '../ingridient-menu-card/ingridient-menu-card';
 import IngridientDetails from '../ingridient-details/ingridient-details';
-import ModalOverlay from '../modal-overlay/modal-overlay';
 import Modal from '../modal/modal';
 import listStyles from './ingridients-list.module.css';
 import PropTypes from 'prop-types';
@@ -31,13 +30,12 @@ const IngridientsList = (props) => {
         })}
       </ul>
       { modalIsOpen &&
-      <ModalOverlay closeModal={() => setModalIsOpen(false)}>
-        <Modal closeModal={() => setModalIsOpen(false)} title='Детали ингридиента'>
-          {currentIngridient &&
-          <IngridientDetails {...currentIngridient}/>
-          }
-        </Modal>
-      </ModalOverlay>}
+      <Modal closeModal={() => setModalIsOpen(false)} title='Детали ингридиента'>
+        {currentIngridient &&
+        <IngridientDetails {...currentIngridient}/>
+        }
+      </Modal>
+      }
     </div>
   )
 }
