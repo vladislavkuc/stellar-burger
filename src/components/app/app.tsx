@@ -10,7 +10,7 @@ const App = () => {
 
   useEffect(() => {
     fetch(url)
-    .then(res => res.json())
+    .then(res => res.ok ? res.json() : Promise.reject('Не удалось загрузить данные ингридиентов'))
     .then(({ data }) => setData(JSON.parse(JSON.stringify(data))))
     .catch(error => console.log(`Ошибка: ${error}`))
   }, []);
