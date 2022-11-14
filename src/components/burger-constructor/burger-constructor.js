@@ -2,10 +2,9 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 import bcStyles from './burger-constructor.module.css';
 import { ConstructorElement, DragIcon, CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import ModalOverlay from '../modal-overlay/modal-overlay';
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
-import { ingredientTypes } from './../../utils/constants';
+import { ingredientTypes } from './../../utils/types';
 
 const BurgerConstructor = (props) => {
   const [ modalIsOpen, setModalIsOpen ] = useState(false);

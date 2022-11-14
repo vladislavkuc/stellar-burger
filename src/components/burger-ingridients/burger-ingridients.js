@@ -2,7 +2,7 @@ import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import biStyles from './burger-ingridients.module.css';
 import IngridientsList from "../ingridients-list/ingridients-list";
 import PropTypes from 'prop-types';
-import { ingredientTypes } from './../../utils/constants';
+import { ingredientTypes } from './../../utils/types';
 
 const BurgerIngridients = (props) => {
   return(
@@ -10,7 +10,7 @@ const BurgerIngridients = (props) => {
       <h1 className="pb-5 text text_type_main-large">
         Соберите бургер
       </h1>
-      <nav className={`pb-10 ${biStyles.navigation}`}>
+      <menu className={`pb-10 ${biStyles.menu}`}>
         <Tab value="one" active={props.current === 'buns'}>
           Булки
         </Tab>
@@ -20,7 +20,7 @@ const BurgerIngridients = (props) => {
         <Tab value="three" active={props.current === 'main'}>
           Начинки
         </Tab>
-      </nav>
+      </menu>
       <div className={biStyles['ingridients-lists']}>
         <IngridientsList data={props.data.filter(element => element.type === 'bun')} title='Булки'/>
         <IngridientsList data={props.data.filter(element => element.type === 'sauce')} title='Соусы'/>

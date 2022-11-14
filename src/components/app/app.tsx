@@ -3,7 +3,7 @@ import appStyles from './app.module.css';
 import AppHeader from '../app-header/app-header';
 import BurgerIngridients from '../burger-ingridients/burger-ingridients';
 import BurgerConstructor from '../burger-constructor/burger-constructor';
-import { url } from './../../utils/constants';
+import { url, data as testData } from './../../utils/constants';
 
 const App = () => {
   const [ data, setData ] = useState([]);
@@ -11,7 +11,7 @@ const App = () => {
   useEffect(() => {
     fetch(url)
     .then(res => res.ok ? res.json() : Promise.reject('Не удалось загрузить данные ингридиентов'))
-    .then(({ data }) => setData(JSON.parse(JSON.stringify(data))))
+    .then(({ data }) => setData(data))
     .catch(error => console.log(`Ошибка: ${error}`))
   }, []);
 
@@ -20,7 +20,7 @@ const App = () => {
       <AppHeader page='constructor'/>
       <main className={`pt-10 ${appStyles.main}`}>
         <BurgerIngridients data={data } />
-        <BurgerConstructor data={data} />
+        <BurgerConstructor data={testData} />
       </main>
     </div>
   );

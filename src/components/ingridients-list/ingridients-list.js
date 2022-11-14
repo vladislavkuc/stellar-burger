@@ -4,7 +4,7 @@ import IngridientDetails from '../ingridient-details/ingridient-details';
 import Modal from '../modal/modal';
 import listStyles from './ingridients-list.module.css';
 import PropTypes from 'prop-types';
-import { ingredientTypes } from './../../utils/constants';
+import { ingredientTypes } from './../../utils/types';
 
 const IngridientsList = (props) => {
   const [ modalIsOpen, setModalIsOpen ] = useState(false);
@@ -23,7 +23,7 @@ const IngridientsList = (props) => {
           return(
             <div className={listStyles['ingridient-wrapper']} onClick={() => handleIngridientClick(element)} key={element._id}>
               <IngridientMenuCard
-                {...element}
+                ingridient={element}
               />
             </div>
           )
@@ -32,7 +32,7 @@ const IngridientsList = (props) => {
       { modalIsOpen &&
       <Modal closeModal={() => setModalIsOpen(false)} title='Детали ингридиента'>
         {currentIngridient &&
-        <IngridientDetails {...currentIngridient}/>
+        <IngridientDetails ingridient={currentIngridient}/>
         }
       </Modal>
       }
