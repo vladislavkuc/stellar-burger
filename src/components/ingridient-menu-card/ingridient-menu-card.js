@@ -1,6 +1,6 @@
 import { CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 import ingridientStyles from './ingridient-menu-card.module.css';
-import { ingredientTypes } from './../../utils/constants';
+import PropTypes from 'prop-types';
 
 const IngridientMenuCard = (props) => {
   return(
@@ -18,7 +18,11 @@ const IngridientMenuCard = (props) => {
 }
 
 IngridientMenuCard.propTypes = {
-  data: ingredientTypes.isRequired,
+  __v: PropTypes.number.isRequired,
+  name: PropTypes.string.isRequired,
+  image: PropTypes.string.isRequired,
+  _id: PropTypes.string.isRequired,
+  price: PropTypes.number.isRequired
 }
 
 export default IngridientMenuCard;
