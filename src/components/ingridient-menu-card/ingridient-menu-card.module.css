@@ -1,0 +1,36 @@
+.item {
+  list-style-type: none;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  max-width: 272px;
+  position: relative;
+}
+
+.counter {
+  position: absolute;
+  right: 0;
+  width: 32px;
+  height: 32px;
+  box-sizing: border-box;
+  border-radius: 50%;
+  background: #4C4CFF;
+  text-align: center;
+}
+
+.counter-hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.price-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.name {
+  width: 100%;
+  max-width: 240px;
+  text-align: center;
+}
