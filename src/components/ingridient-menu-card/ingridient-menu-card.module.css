@@ -5,6 +5,7 @@
   flex-direction: column;
   max-width: 272px;
   position: relative;
+  background-color: rgba(19, 19, 22, 1);
 }
 
 .counter {

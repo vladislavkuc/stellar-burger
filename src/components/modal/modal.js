@@ -5,8 +5,13 @@ import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import ModalOverlay from '../modal-overlay/modal-overlay';
 import { modalRoot } from './../../utils/constants';
 import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { DELETE_DISPLAYED_INGREDIENT } from '../../services/actions/ingredient';
 
 const Modal = (props) => {
+  const { closeModal } = props;
+  const dispatch = useDispatch();
+
   useEffect(() => {
     window.addEventListener('keydown', handleEscPress);
     return () => window.removeEventListener('keydown', handleEscPress);
@@ -15,9 +20,14 @@ const Modal = (props) => {
 
   const handleEscPress = (e) => {
     if (e.key === 'Escape') {
-      props.closeModal();
+      closeModal();
     }
-  }
+  };
+
+  const handleClose = () => {
+    closeModal();
+    dispatch({ type: DELETE_DISPLAYED_INGREDIENT });
+  };
 
   return ReactDOM.createPortal(
     (
@@ -28,7 +38,7 @@ const Modal = (props) => {
             {props.title}
           </p>
 
-          <div className={modalStyles['close-icon-wrapper']} onClick={props.closeModal}>
+          <div className={modalStyles['close-icon-wrapper']} onClick={handleClose}>
             <CloseIcon type="primary" />
           </div>
         </div>
