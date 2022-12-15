@@ -1,6 +1,6 @@
 import constructorIngredientStyles from './constructor-ingredient.module.css';
 import { ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useDrop, useDrag } from 'react-dnd';
 import { DELETE_INGREDIENT, SORT_INGREDIENT } from '../../services/actions/burger';
 import { DECREASE_INGREDIENT } from '../../services/actions/menu';

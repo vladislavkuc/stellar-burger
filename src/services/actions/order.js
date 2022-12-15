@@ -13,13 +13,14 @@ export function sendOrder(orderData) {
       if (res && res.success) {
         dispatch({
           type: SEND_ORDER_SUCCESS,
-          order: res.data.order
+          order: res.order
         });
       } else {
         dispatch({
           type: SEND_ORDER_FAILED
         });
       }
-    });
+    })
+    .catch(errorText => console.log(`Ошибка: ${errorText}`));
   };
 }

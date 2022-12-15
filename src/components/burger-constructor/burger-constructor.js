@@ -1,5 +1,5 @@
 import bcStyles from './burger-constructor.module.css';
-import { ConstructorElement, DragIcon, CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
+import { ConstructorElement, CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,6 +8,8 @@ import { useDrop } from 'react-dnd';
 import { ADD_INGREDIENT} from '../../services/actions/burger';
 import { INCREASE_BUN, INCREASE_INGREDIENT } from '../../services/actions/menu';
 import ConstructorIngredient from '../constructor-ingredient/constructor-ingredient';
+import { DELETE_DISPLAYED_INGREDIENT } from '../../services/actions/ingredient';
+
 
 const BurgerConstructor = () => {
   const { modalIsOpen, modalType } = useSelector(store => store.modal);
@@ -15,7 +17,7 @@ const BurgerConstructor = () => {
   const dispatch = useDispatch();
 
   const handleClick = () => {
-    dispatch({
+    bun.name && dispatch({
       type: OPEN_MODAL,
       modalType: 'order'
     })
@@ -24,7 +26,8 @@ const BurgerConstructor = () => {
   const closeModal = () => {
     dispatch({
       type: CLOSE_MODAL,
-    })
+    });
+    dispatch({ type: DELETE_DISPLAYED_INGREDIENT });
   };
 
   const [{ isHover }, dropTarget] = useDrop({
@@ -64,7 +67,7 @@ const BurgerConstructor = () => {
         <ul className={`${bcStyles['mains-and-sauces']}`}>
         {ingredients.map((ingredient, index) =>
           <ConstructorIngredient ingredient={ingredient} index={index}
-          key={index}/>
+          key={ingredient.uuid}/>
         )}
         </ul>
         { bun.name &&

@@ -2,13 +2,14 @@ import { CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-c
 import ingridientStyles from './ingridient-menu-card.module.css';
 import { ingredientTypes } from './../../utils/types';
 import { useDrag } from 'react-dnd';
+import { v4 } from 'uuid';
 
 const IngridientMenuCard = (props) => {
   const { ingredient } = props;
 
   const [{ opacity }, ref] = useDrag({
     type: 'ingredient',
-    item: { ...ingredient },
+    item: { ...ingredient, uuid: v4() },
     collect: monitor => ({
       opacity: monitor.isDragging() ? 0.5 : 1
     })

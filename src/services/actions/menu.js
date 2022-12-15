@@ -26,6 +26,7 @@ export function getIngridients() {
           type: GET_INGRIDIENTS_FAILED
         });
       }
-    });
+    })
+    .catch(errorText => console.log(`Ошибка: ${errorText}`));
   };
 }
