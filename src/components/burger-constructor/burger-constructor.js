@@ -1,68 +1,83 @@
-import { useState } from 'react';
-import PropTypes from 'prop-types';
 import bcStyles from './burger-constructor.module.css';
-import { ConstructorElement, DragIcon, CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
+import { ConstructorElement, CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
-import { ingredientTypes } from './../../utils/types';
+import { useDispatch, useSelector } from 'react-redux';
+import { OPEN_MODAL, CLOSE_MODAL } from '../../services/actions/modal';
+import { useDrop } from 'react-dnd';
+import { ADD_INGREDIENT} from '../../services/actions/burger';
+import { INCREASE_BUN, INCREASE_INGREDIENT } from '../../services/actions/menu';
+import ConstructorIngredient from '../constructor-ingredient/constructor-ingredient';
+import { DELETE_DISPLAYED_INGREDIENT } from '../../services/actions/ingredient';
 
-const BurgerConstructor = (props) => {
-  const [ modalIsOpen, setModalIsOpen ] = useState(false);
+
+const BurgerConstructor = () => {
+  const { modalIsOpen, modalType } = useSelector(store => store.modal);
+  const { ingredients, bun } = useSelector(store => store.burger);
+  const dispatch = useDispatch();
 
   const handleClick = () => {
-    setModalIsOpen(true);
-  }
+    bun.name && dispatch({
+      type: OPEN_MODAL,
+      modalType: 'order'
+    })
+  };
 
-  const state = {
-      bun: props.data.find(ingridient => ingridient.type === 'bun' && ingridient.__v),
-      otherIngridients: props.data.reduce((cur, ing) => {
-        if (ing.type !== 'bun' && ing.__v) {
-          for(let i = 0; i < ing.__v; i++) {
-            cur.push(ing);
-          }
-        }
-        return cur;
-      }, []),
-    };
+  const closeModal = () => {
+    dispatch({
+      type: CLOSE_MODAL,
+    });
+    dispatch({ type: DELETE_DISPLAYED_INGREDIENT });
+  };
+
+  const [{ isHover }, dropTarget] = useDrop({
+    accept: "ingredient",
+    collect: monitor => ({
+      isHover: monitor.isOver()
+    }),
+    drop(item){
+      dispatch({
+        type: ADD_INGREDIENT,
+        ingredient: item
+      });
+      item.type === 'bun' ?
+      dispatch({
+        type: INCREASE_BUN,
+        id: item._id
+      }) :
+      dispatch({
+        type: INCREASE_INGREDIENT,
+        id: item._id
+      });
+    }
+  });
 
   return(
     <section className={bcStyles.content}>
-      <div className={`pt-5 pb-5 pr-4 ${bcStyles.ingridients}`}>
-        {
-          state.bun &&
-          <span className={`${bcStyles.ingridient} pl-8 pr-4`}>
+      <div className={`pt-5 pb-5 pr-4 ${bcStyles.ingridients} ${isHover ? bcStyles.hover : ''}`} ref={dropTarget}>
+        {bun.name && <span className={`${bcStyles.ingridient} pl-8 pr-4`}>
             <ConstructorElement
               type="top"
               isLocked={true}
-              text={state.bun.name + ' (верх)'}
-              price={state.bun.price}
-              thumbnail={state.bun.image_mobile}
+              text={bun.name + ' (верх)'}
+              price={bun.price}
+              thumbnail={bun.image_mobile}
             />
-          </span>
-        }
+          </span>}
         <ul className={`${bcStyles['mains-and-sauces']}`}>
-        {state.otherIngridients.map((ingridient, index) =>
-          <li className={bcStyles.ingridient}
-          key={index}>
-            <DragIcon type="primary" />
-            <ConstructorElement
-              isLocked={false}
-              text={ingridient.name}
-              price={ingridient.price}
-              thumbnail={ingridient.image_mobile}
-            />
-          </li>
+        {ingredients.map((ingredient, index) =>
+          <ConstructorIngredient ingredient={ingredient} index={index}
+          key={ingredient.uuid}/>
         )}
         </ul>
-        {
-          state.bun &&
+        { bun.name &&
           <span className={`${bcStyles.ingridient} pl-8 pr-4`}>
             <ConstructorElement
               type="bottom"
               isLocked={true}
-              text={state.bun.name + ' (низ)'}
-              price={state.bun.price}
-              thumbnail={state.bun.image_mobile}
+              text={bun.name + ' (низ)'}
+              price={bun.price}
+              thumbnail={bun.image_mobile}
             />
           </span>
         }
@@ -70,7 +85,7 @@ const BurgerConstructor = (props) => {
 
       <div className={bcStyles.info}>
         <div className={bcStyles['price-wrapper']}>
-          <span className="mr-2 text text_type_digits-medium">{(state.bun ? state.bun.price*2 : 0) + state.otherIngridients.reduce((cur, el) => cur + el.price, 0)}</span>
+          <span className="mr-2 text text_type_digits-medium">{(bun.price ? bun.price*2 : 0) + ingredients.reduce((cur, el) => cur + el.price, 0)}</span>
           <CurrencyIcon type="primary" />
         </div>
         <Button onClick={handleClick} htmlType="button" type="primary" size="large">
@@ -78,17 +93,13 @@ const BurgerConstructor = (props) => {
         </Button>
       </div>
 
-      { modalIsOpen &&
-      <Modal closeModal={() => setModalIsOpen(false)} title=''>
+      { modalIsOpen && modalType === 'order' &&
+      <Modal closeModal={closeModal} title=''>
         <OrderDetails />
       </Modal>
       }
     </section>
   )
-}
-
-BurgerConstructor.propTypes = {
-  data: PropTypes.arrayOf(ingredientTypes).isRequired,
 }
 
 export default BurgerConstructor;

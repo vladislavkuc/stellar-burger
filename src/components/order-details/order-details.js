@@ -1,15 +1,31 @@
-import PropTypes from 'prop-types';
-import { useState } from 'react';
 import orderStyles from './order-details.module.css';
-import { order as testOrderData } from './../../utils/constants';
 import orderDone from './../../images/done.svg';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { sendOrder } from '../../services/actions/order';
 
 const OrderDetails = () => {
-  const [order, setOrder] = useState({...testOrderData});
+  const { order } = useSelector(store => store.order);
+  const { ingredients, bun } = useSelector(store => store.burger);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(
+      sendOrder(
+        {
+          ingredients: [
+            bun._id,
+            ...ingredients.map(ing => ing._id),
+            bun._id,
+          ]
+        }
+      )
+    )
+  }, []);
 
   return(
     <div className={orderStyles.order}>
-      <span className='text text_type_digits-large mb-8'>{order.id}</span>
+      <span className='text text_type_digits-large mb-8'>{order.number}</span>
       <span className='text text_type_main-medium'>идентификатор заказа</span>
       <img src={orderDone} alt="заказ готовится" className={orderStyles.image}/>
       <span className='text text_type_main-default mb-2'>Ваш заказ начали готовить</span>
@@ -17,11 +33,5 @@ const OrderDetails = () => {
     </div>
   )
 };
-
-OrderDetails.propTypes = {
-  order: PropTypes.shape({
-    id: PropTypes.string
-  })
-}
 
 export default OrderDetails;

@@ -7,17 +7,22 @@ import { modalRoot } from './../../utils/constants';
 import { useEffect } from 'react';
 
 const Modal = (props) => {
+  const { closeModal } = props;
+
   useEffect(() => {
+    const handleEscPress = (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+      }
+    };
+
     window.addEventListener('keydown', handleEscPress);
     return () => window.removeEventListener('keydown', handleEscPress);
   }, []);
 
-
-  const handleEscPress = (e) => {
-    if (e.key === 'Escape') {
-      props.closeModal();
-    }
-  }
+  const handleClose = () => {
+    closeModal();;
+  };
 
   return ReactDOM.createPortal(
     (
@@ -28,7 +33,7 @@ const Modal = (props) => {
             {props.title}
           </p>
 
-          <div className={modalStyles['close-icon-wrapper']} onClick={props.closeModal}>
+          <div className={modalStyles['close-icon-wrapper']} onClick={handleClose}>
             <CloseIcon type="primary" />
           </div>
         </div>
