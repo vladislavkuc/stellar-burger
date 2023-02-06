@@ -1,5 +1,5 @@
 import { url } from './constants';
-import { getCookie } from './utils';
+import { getCookie, setCookie } from './utils';
 
 const headers = { 'Content-Type': 'application/json' }
 
@@ -11,9 +11,42 @@ const makeRequest = (subUrl, body, errorText = 'Произошла ошибка'
   })
 };
 
+
+export const getNewAccessToken = (data) => {
+  return makeRequest('/auth/token', {
+    method: 'POST',
+    headers,
+    body: JSON.stringify(data)
+  }, 'Не удалось обновить токен');
+};
+
+
+const makeRequestWithRefresh = (subUrl, body, errorText) => {
+  if (!getCookie('token')) {
+    getNewAccessToken(localStorage.getItem('refreshToken'))
+      .then(res => {
+        setCookie('token', res.accessToken.split('Bearer ')[1], { expires: 1200 });
+        localStorage.setItem('refreshToken', res.refreshToken);
+      })
+  }
+  return makeRequest(subUrl, body, errorText)
+};
+
+
+export const getUserInfo = () => {
+  return makeRequestWithRefresh('/auth/user', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + getCookie('token')
+    }} , 'Не удалось получить данные пользователя');
+};
+
+
 export const getIngridientsRequest = () => {
   return makeRequest('/ingredients', {method: 'GET'});
 };
+
 
 export const sendOrderRequest = (orderData) => {
   return makeRequest('/orders', {
@@ -23,6 +56,7 @@ export const sendOrderRequest = (orderData) => {
   }, 'Не удалось отправить данные заказа');
 };
 
+
 export const sendForgotPasswordResquest = (email) => {
   return makeRequest('/password-reset', {
     method: 'POST',
@@ -31,6 +65,7 @@ export const sendForgotPasswordResquest = (email) => {
   }, 'Не удалось отправить email для восстановления пароля');
 };
 
+
 export const sendResetPasswordResquest = (data) => {
   return makeRequest('/password-reset/reset', {
     method: 'POST',
@@ -38,6 +73,7 @@ export const sendResetPasswordResquest = (data) => {
     body: JSON.stringify(data)
   }, 'Не удалось восстановить пароль');
 };
+
 
 export const sendRegisterRequest = (data) => {
   return makeRequest('/auth/register', {
@@ -66,17 +102,8 @@ export const sendLogoutRequest = (data) => {
 };
 
 
-export const getNewAccessToken = (data) => {
-  return makeRequest('/auth/token', {
-    method: 'POST',
-    headers,
-    body: JSON.stringify(data)
-  }, 'Не удалось обновить токен');
-};
-
-
 export const updateUserInfo = (data) => {
-  return makeRequest('/auth/user', {
+  return makeRequestWithRefresh('/auth/user', {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
@@ -84,15 +111,5 @@ export const updateUserInfo = (data) => {
     },
     body: JSON.stringify(data)
   } , 'Не удалось обновить данные пользователя');
-
 };
 
-
-export const getUserInfo = () => {
-  return makeRequest('/auth/user', {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + getCookie('token')
-    }} , 'Не удалось получить данные пользователя');
-};

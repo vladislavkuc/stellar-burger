@@ -11,15 +11,15 @@ const App = () => {
         <AppHeader page='constructor'/>
         <main className={appStyles.main}>
           <Routes>
-            <Route path="/login" element={<LoginPage/>}/>
-            <Route path="/register" element={<RegisterPage />}/>
-            <Route path="/forgot-password" element={<ForgotPage />}/>
-            <Route path="/reset-password" element={<ResetPage />}/>
+            <Route path="/login" element={<ProtectedRouteElement isProtected={false} element={<LoginPage/>}/>}/>
+            <Route path="/register" element={<ProtectedRouteElement isProtected={false} element={<RegisterPage/>}/>}/>
+            <Route path="/forgot-password" element={<ProtectedRouteElement isProtected={false} element={<ForgotPage />}/>}/>
+            <Route path="/reset-password" element={<ProtectedRouteElement isProtected={false} element={<ResetPage />}/>}/>
             <Route path='/feed' element={<FeedPage />}/>
             <Route path='/feed/:id' element={<OrderPage />}/>
-            <Route path="/profile" element={<ProtectedRouteElement element={<ProfilePage />} /> } />
-            <Route path="/profile/orders" element={<ProtectedRouteElement element={<ProfilePage />} /> } />
-            <Route path="/profile/orders/:id" element={<ProtectedRouteElement element={<OrderPage />} /> } />
+            <Route path="/profile" element={<ProtectedRouteElement isProtected={true} element={<ProfilePage />} /> } />
+            <Route path="/profile/orders" element={<ProtectedRouteElement isProtected={true} element={<ProfilePage />} /> } />
+            <Route path="/profile/orders/:id" element={<ProtectedRouteElement isProtected={true} element={<OrderPage />} /> } />
             <Route path="/ingredients/:id" element={<ConstructorPage />}/>
             <Route path="/" element={<ConstructorPage />}/>
           </Routes>

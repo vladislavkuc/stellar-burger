@@ -25,7 +25,7 @@ export const RegisterPage = () => {
 
   const handleReg = (e) => {
     e.preventDefault();
-    sendRegisterRequest ({email: state.email, password: state.password})
+    sendRegisterRequest ({email: state.email, password: state.password, name: state.name})
       .then(data => {
         if (data.success) {
           setCookie('token', data.accessToken.split('Bearer ')[1], { expires: 1200 });

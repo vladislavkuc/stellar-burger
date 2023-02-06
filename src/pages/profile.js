@@ -37,7 +37,8 @@ export const ProfilePage = () => {
       .catch(error => console.log(`Ошибка: ${error})`));
   };
 
-  const handleEdit = () => {
+  const handleEdit = (e) => {
+    e.preventDefault();
     updateUserInfo({ name: state.name, email: state.email})
       .then(data => {
         if (data.success){
@@ -60,7 +61,6 @@ export const ProfilePage = () => {
   };
 
   const defaultClassName = `text_type_main-medium text_color_inactive ${styles['nav-link']}`;
-
 
   useEffect(() => {
     getUserInfo()
