@@ -1,4 +1,4 @@
-import { sendOrderRequest } from "../api";
+import { sendOrderRequest } from "../../services/api";
 
 export const SEND_ORDER_REQUEST = 'SEND_ORDER_REQUEST';
 export const SEND_ORDER_SUCCESS = 'SEND_ORDER_SUCCESS';

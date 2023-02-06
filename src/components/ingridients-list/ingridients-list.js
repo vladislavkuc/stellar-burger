@@ -4,26 +4,21 @@ import IngridientDetails from '../ingridient-details/ingridient-details';
 import Modal from '../modal/modal';
 import listStyles from './ingridients-list.module.css';
 import PropTypes from 'prop-types';
-import { SET_DISPLAYED_INGREDIENT } from '../../services/actions/ingredient';
-import { OPEN_MODAL, CLOSE_MODAL } from '../../services/actions/modal';
+import { CLOSE_MODAL } from '../../redux/actions/modal';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const IngridientsList = (props) => {
   const { type } = props;
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
 
   const { modalIsOpen, modalType } = useSelector(store => store.modal);
   const { receivedIngridients } = useSelector(store => store.menu);
 
 
   const handleIngridientClick = (ingredient) => {
-    dispatch({
-      type: SET_DISPLAYED_INGREDIENT,
-      ingredient
-    });
-    dispatch({
-      type: OPEN_MODAL,
-      modalType: 'details'
-    });
+    navigate(`/ingredients/${ingredient._id}`, { state: { path: pathname, title: 'Конструктор Бургера' } });
   };
 
   const closeModal = () => {

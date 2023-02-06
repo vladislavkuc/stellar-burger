@@ -1,0 +1,121 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  overflow-y: auto;
+}
+
+.wrapper::-webkit-scrollbar {
+  width: 8px;
+}
+
+.wrapper::-webkit-scrollbar-track {
+  background: rgba(47, 47, 55, 1);
+}
+
+.wrapper::-webkit-scrollbar-thumb {
+  background: rgba(133, 133, 173, 1);
+}
+
+.order {
+  padding: 24px;
+  width: calc(100% - 8px);
+  background: #1C1C21;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.04), 0px 0px 2px rgba(0, 0, 0, 0.06), 0px 0px 1px rgba(0, 0, 0, 0.04);
+  border-radius: 40px;
+  box-sizing: border-box;
+  list-style-type: none;
+}
+
+.headers {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.price {
+  display: flex;
+  flex-direction: row;
+  width: fit-content;
+  align-items: center;
+}
+
+.ingredients {
+  height: 64px;
+  display: flex;
+  flex-direction: row;
+  position: relative;
+}
+
+.ingredient {
+  border: 2px solid transparent;
+  border-radius: 100%;
+  width: 64px;
+  height: 64px;
+  overflow: hidden;
+  position: absolute;
+  z-index: 2;
+  background: linear-gradient(63.18deg, #801AB3 0%, #4C4CFF 100%);
+}
+
+.ingredient::before {
+  width: 64px;
+  height: 64px;
+  content: '';
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+  z-index: 1;
+  border-radius: inherit;
+  background: #131316;
+}
+
+.ingredient:nth-of-type(2) {
+  margin-left: 48px;
+}
+
+.ingredient:nth-of-type(3) {
+  margin-left: 96px;
+}
+
+.ingredient:nth-of-type(4) {
+  margin-left: 144px;
+}
+
+.ingredient:nth-of-type(5) {
+  margin-left: 192px;
+}
+
+.ingredient:nth-of-type(6) {
+  margin-left: 240px;
+}
+
+.image {
+  width: 112px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 20;
+}
+
+.count {
+  border-radius: 50%;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 64px;
+  height: 64px;
+  position: absolute;
+  z-index: 21;
+  background: #1C1C21;
+  opacity: 0.6;
+  top: 0;
+  right: 0;
+}
+
+.done {
+  color: rgba(0, 204, 204, 1);
+}

@@ -1,6 +1,6 @@
 import { CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 import ingridientStyles from './ingridient-menu-card.module.css';
-import { ingredientTypes } from './../../utils/types';
+import { ingredientTypes } from './../../services/types';
 import { useDrag } from 'react-dnd';
 import { v4 } from 'uuid';
 

@@ -1,4 +1,4 @@
-import { getIngridientsRequest } from "../api";
+import { getIngridientsRequest } from "../../services/api";
 
 export const INCREASE_INGREDIENT = 'INCREASE_INGREDIENT';
 export const INCREASE_BUN = 'INCREASE_BUN';

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import biStyles from './burger-ingridients.module.css';
 import IngridientsList from "../ingridients-list/ingridients-list";
-import { getIngridients, SET_MENU_TAB } from '../../services/actions/menu';
+import { SET_MENU_TAB } from '../../redux/actions/menu';
 
 const BurgerIngridients = () => {
   const { tab } = useSelector(store => store.menu);
@@ -22,10 +22,6 @@ const BurgerIngridients = () => {
       dispatch({ type: SET_MENU_TAB, tab })
     });
   }, []);
-
-  useEffect(() => {
-    dispatch(getIngridients());
-  }, [dispatch]);
 
   return(
     <section className={biStyles.content}>
