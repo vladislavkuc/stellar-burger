@@ -27,7 +27,7 @@ const makeRequestWithRefresh = (subUrl, body, errorText) => {
       .then(res => {
         setCookie('token', res.accessToken.split('Bearer ')[1], { expires: 1200 });
         localStorage.setItem('refreshToken', res.refreshToken);
-      })
+    })
   }
   return makeRequest(subUrl, body, errorText)
 };
@@ -49,9 +49,12 @@ export const getIngridientsRequest = () => {
 
 
 export const sendOrderRequest = (orderData) => {
-  return makeRequest('/orders', {
+  return makeRequestWithRefresh('/orders', {
     method: 'POST',
-    headers,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + getCookie('token')
+    },
     body: JSON.stringify(orderData)
   }, 'Не удалось отправить данные заказа');
 };

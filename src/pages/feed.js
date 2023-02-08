@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { OrderItems } from '../components/order-items/order-items';
-import { WS_CONNECTION_CLOSED, WS_CONNECTION_START } from '../redux/actions/wsActions';
+import { WS_CONNECTION_CLOSED, WS_CONNECTION_START, WS_CONNECTION_STOP } from '../redux/actions/wsActions';
 import styles from './feed.module.css';
 
 export const FeedPage = () => {
@@ -10,7 +10,10 @@ export const FeedPage = () => {
 
   useEffect(() => {
     dispatch({type: WS_CONNECTION_START, wsUrl: 'wss://norma.nomoreparties.space/orders/all'});
-    return () => dispatch({type: WS_CONNECTION_CLOSED})
+    return () => {
+      dispatch({type: WS_CONNECTION_CLOSED});
+      dispatch({type: WS_CONNECTION_STOP});
+    }
   }, []);
 
   return (

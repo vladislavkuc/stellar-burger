@@ -5,9 +5,12 @@ export const socketMiddleware = (wsActions) => {
     return next => action => {
       const { dispatch } = store;
       const { type, wsUrl } = action;
-      const { wsInit, onOpen, onClose, onError, onMessage } = wsActions;
+      const { wsInit, wsStop, onOpen, onClose, onError, onMessage } = wsActions;
       if (type === wsInit) {
         socket = new WebSocket(`${wsUrl}`);
+      }
+      if (type === wsStop && socket) {
+        socket.close();
       }
       if (socket) {
         socket.onopen = event => {

@@ -1,4 +1,4 @@
-import { ADD_INGREDIENT, DELETE_INGREDIENT, SORT_INGREDIENT } from '../actions/burger';
+import { ADD_INGREDIENT, DELETE_INGREDIENT, SORT_INGREDIENT, CLEAR_INGREDIENTS } from '../actions/burger';
 
 const initialState = {
   ingredients: [],
@@ -7,6 +7,11 @@ const initialState = {
 
 export const burgerReducer = (state = initialState, action) => {
   switch (action.type) {
+    case CLEAR_INGREDIENTS: {
+      return {
+        ...initialState
+      }
+    }
     case ADD_INGREDIENT: {
       return {
         ...state,

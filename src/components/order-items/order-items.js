@@ -14,10 +14,6 @@ export const OrderItems = ({orders, inProfile}) => {
       .catch(error => console.log(`Ошибка:${error}`));
   }, []);
 
-  useEffect(() => {
-    console.log()
-  }, [ingredientsList]);
-
   const handleClick = (order) => {
     const pathto = inProfile ? `/profile/orders/${order._id}` : `/feed/${order._id}`;
     navigate(pathto, {state: { order: {...order}}});
@@ -37,7 +33,7 @@ export const OrderItems = ({orders, inProfile}) => {
             {
             inProfile
               ? <>
-                  <p className='text text_type_main-medium mb-2'>Death Star Starship Main бургер</p>
+                  <p className='text text_type_main-medium mb-2'>{order.name}</p>
                   {
                     order.status === 'done' ?
                     <p className={`${styles.done} text text_type_main-small mb-4`}>Выполнен</p> :
@@ -46,7 +42,7 @@ export const OrderItems = ({orders, inProfile}) => {
                     <p className={'text text_type_main-small mb-4'}>Создан</p>
                   }
                 </>
-              : <p className='text text_type_main-medium mb-6'>Death Star Starship Main бургер</p>
+              : <p className='text text_type_main-medium mb-6'>{order.name}</p>
             }
             <div className={styles.headers}>
               {ingredientsList.length !== 0 &&

@@ -7,10 +7,10 @@ import { RESET_USER, SET_USER } from '../redux/actions/user';
 import { getNewAccessToken, getUserInfo, sendLogoutRequest, updateUserInfo } from '../services/api';
 import { getCookie, deleteCookie, setCookie } from '../services/utils';
 import { OrderItems } from '../components/order-items/order-items';
-import { WS_CONNECTION_START, WS_CONNECTION_CLOSED } from '../redux/actions/wsActions';
+import { WS_CONNECTION_CLOSED, WS_CONNECTION_START, WS_CONNECTION_STOP } from '../redux/actions/wsActions';
 
 export const ProfilePage = () => {
-  const { orders } = useSelector(store => store.ws);
+  const { orders, wsConnected } = useSelector(store => store.ws);
   const dispatch = useDispatch();
   const { pathname } = useLocation();
   const [state, setState] = React.useState({
@@ -72,18 +72,33 @@ export const ProfilePage = () => {
         });
       })
       .catch(error => console.log(error));
-  }, []);
+    return () => {
+      if (wsConnected) {
+        dispatch({type: WS_CONNECTION_CLOSED});
+        dispatch({type: WS_CONNECTION_STOP});
+      }
+    }
+  }, [dispatch]);
 
 
   useEffect(() => {
-    if (!getCookie('token')) {
-      getNewAccessToken({token: localStorage.getItem('refreshToken')})
-        .then(data => setCookie('token', data.accessToken.split('Bearer ')[1], { expires: 1200 }))
-        .catch(error => console.log(error));
+    if (pathname === '/profile/orders'){
+      if (!getCookie('token')) {
+        getNewAccessToken({token: localStorage.getItem('refreshToken')})
+          .then(data => {
+            setCookie('token', data.accessToken.split('Bearer ')[1], { expires: 1200 });
+            localStorage.setItem('refreshToken', data.refreshToken);
+          })
+          .catch(error => console.log(error));
+      }
+      dispatch({type: WS_CONNECTION_START, wsUrl: `wss://norma.nomoreparties.space/orders?token=${getCookie('token')}`});
+    } else {
+      if (wsConnected) {
+        dispatch({type: WS_CONNECTION_CLOSED});
+        dispatch({type: WS_CONNECTION_STOP});
+      };
     }
-    dispatch({type: WS_CONNECTION_START, wsUrl: `wss://norma.nomoreparties.space/orders?token=${getCookie('token')}`});
-    return () => dispatch({type: WS_CONNECTION_CLOSED})
-  }, []);
+  }, [pathname, dispatch]);
 
   return(
     <div className={styles.wrapper}>

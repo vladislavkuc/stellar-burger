@@ -1,17 +1,26 @@
 import { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
-import { getUserInfo } from '../../services/api';
+import { getNewAccessToken } from '../../services/api';
+import { setCookie } from '../../services/utils';
 
 export function ProtectedRouteElement({ element, isProtected }) {
   const [ auth, setAuth ] = useState(isProtected);
 
   useEffect(() => {
-    getUserInfo()
-      .then(res => {
-        if (res.succes) { setAuth(true) }
-        else { setAuth(false) }
-      })
-      .catch(err => console.log(err));
+    if (localStorage.getItem('refreshToken')){
+      getNewAccessToken({token: localStorage.getItem('refreshToken')})
+        .then(res => {
+          if (res.success) {
+            setAuth(true);
+            setCookie('token', res.accessToken.split('Bearer ')[1], { expires: 1200 });
+            localStorage.setItem('refreshToken', res.refreshToken);
+          }
+          else { setAuth(false) }
+        })
+        .catch(err => console.log(err));
+    } else {
+      setAuth(false)
+    }
   }, []);
 
   if (isProtected && !auth) {

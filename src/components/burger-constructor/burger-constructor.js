@@ -23,7 +23,7 @@ const BurgerConstructor = () => {
       bun.name && dispatch({
         type: OPEN_MODAL,
         modalType: 'order'
-      })
+      });
     } else {
       navigate('/login');
     }
