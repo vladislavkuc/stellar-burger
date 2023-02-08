@@ -2,14 +2,17 @@ import styles from './order.module.css';
 import { useEffect, useState } from 'react';
 import { getIngridientsRequest } from '../services/api';
 import { CurrencyIcon, FormattedDate } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
-export const OrderPage = () => {
+export const OrderPage = ({isModal}) => {
+  const modal = false || isModal;
   const { state } = useLocation();
-  const { order } = state;
-
+  const { id } = useParams();
+  const { orders } = useSelector(store => store.ws);
   const [ ingredientsList, setIngredientsList ] = useState([]);
   const [ orderIngredients, setOrderIngredients ] = useState([]);
+  const [ order, setOrder ] = useState(null);
 
   useEffect(() => {
     getIngridientsRequest()
@@ -18,20 +21,31 @@ export const OrderPage = () => {
   }, []);
 
   useEffect(() => {
-    setOrderIngredients([...ingredientsList
-    .filter(ingredient => order.ingredients.find(id => id === ingredient._id))
-    .map(ingredient =>
-      {
-        return { count: order.ingredients.reduce((sum, val) => val == ingredient._id ? sum + 1 : sum, 0), ...ingredient }
-      }
-    )]);
-  }, [ingredientsList]);
+    if (state) {
+      setOrder({...state.order});
+    } else {
+      setOrder({...(orders.find(ord => ord._id === id))});
+    }
+  }, [orders]);
+
+  useEffect(() => {
+    if (order && order.ingredients && ingredientsList) {
+      setOrderIngredients([...ingredientsList
+      .filter(ingredient => order.ingredients.find(id => id === ingredient._id))
+      .map(ingredient =>
+        {
+          return { count: order.ingredients.reduce((sum, val) => val == ingredient._id ? sum + 1 : sum, 0), ...ingredient }
+        }
+      )]);
+    }
+  }, [ingredientsList, order]);
 
   return (
+    order ?
     <div className={styles.wrapper}>
-      <div className={styles.order}>
+      <div className={modal ? styles.modal : styles.order}>
         <p className={`${styles.number} text text_type_digits-default`}>#{order.number}</p>
-        <p className='text text text_type_main-medium mb-3'>Death Star Starship Main бургер</p>
+        <p className='text text text_type_main-medium mb-3'>{order.name}</p>
         { order.status === 'done' ?
           <p className={`${styles.done} text text_type_main-small mb-15`}>Выполнен</p> :
           order.status === 'pending' ?
@@ -39,7 +53,7 @@ export const OrderPage = () => {
           <p className={'text text_type_main-small mb-15'}>Создан</p>
         }
         <p className='text text text_type_main-medium mb-6'>Состав:</p>
-        <ul className={`mb-6 ${styles.ingredients}`}>
+        <ul className={`mb-6 ${modal ? styles.modalingredients : styles.ingredients}`}>
           { orderIngredients &&
             orderIngredients.map(ingredient => {
               return(
@@ -67,6 +81,12 @@ export const OrderPage = () => {
           </div>
           }
         </div>
+      </div>
+    </div>
+    :
+    <div className={styles.wrapper}>
+      <div className={modal ? styles.modal : styles.order}>
+        <p className='text text text_type_main-medium mb-3'>Заказ не найден</p>
       </div>
     </div>
   )

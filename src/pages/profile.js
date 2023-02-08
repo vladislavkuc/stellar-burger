@@ -1,16 +1,23 @@
 import React, { useEffect } from 'react';
 import styles from './profile.module.css';
 import { EmailInput, Input, Button, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
-import { NavLink, useLocation, Link } from 'react-router-dom';
+import { NavLink, useLocation, Link, useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { RESET_USER, SET_USER } from '../redux/actions/user';
 import { getNewAccessToken, getUserInfo, sendLogoutRequest, updateUserInfo } from '../services/api';
 import { getCookie, deleteCookie, setCookie } from '../services/utils';
 import { OrderItems } from '../components/order-items/order-items';
 import { WS_CONNECTION_CLOSED, WS_CONNECTION_START, WS_CONNECTION_STOP } from '../redux/actions/wsActions';
+import Modal from '../components/modal/modal';
+import { CLOSE_MODAL, OPEN_MODAL } from '../redux/actions/modal';
+import { OrderPage } from './order';
 
 export const ProfilePage = () => {
+  const navigate = useNavigate();
+  const localState = useLocation().state;
   const { orders, wsConnected } = useSelector(store => store.ws);
+  const { modalIsOpen, modalType } = useSelector(store => store.modal);
+  const { id } = useParams();
   const dispatch = useDispatch();
   const { pathname } = useLocation();
   const [state, setState] = React.useState({
@@ -19,6 +26,13 @@ export const ProfilePage = () => {
     password: '',
     isEdit: false
   });
+
+  const closeModal = () => {
+    dispatch({
+      type: CLOSE_MODAL,
+    });;
+    navigate('/profile/orders');
+  };
 
   const inputNameRef = React.useRef(null);
   const onIconClick = (ref) => {
@@ -82,7 +96,7 @@ export const ProfilePage = () => {
 
 
   useEffect(() => {
-    if (pathname === '/profile/orders'){
+    if (pathname === '/profile/orders' || (id && pathname === `/profile/orders/${id}`)){
       if (!getCookie('token')) {
         getNewAccessToken({token: localStorage.getItem('refreshToken')})
           .then(data => {
@@ -99,6 +113,19 @@ export const ProfilePage = () => {
       };
     }
   }, [pathname, dispatch]);
+
+  useEffect(() => {
+    if (pathname !== '/profile/orders' && pathname !== '/profile' && localState) {
+      dispatch({
+        type: OPEN_MODAL,
+        modalType: 'orderInfo'
+      })
+    }
+  }, [pathname]);
+
+  if (pathname !== '/profile/orders' && pathname !== '/profile' && !localState) {
+    return <OrderPage isModal={false}/>
+  }
 
   return(
     <div className={styles.wrapper}>
@@ -181,9 +208,16 @@ export const ProfilePage = () => {
         }
       </form>
       :
+      <>
       <section className={styles.orders}>
         <OrderItems inProfile={true} orders={orders}/>
       </section>
+      { modalIsOpen && modalType === 'orderInfo' &&
+      <Modal closeModal={closeModal} title=''>
+        <OrderPage isModal={true}/>
+      </Modal>
+      }
+      </>
       }
     </div>
   )

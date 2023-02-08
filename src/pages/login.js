@@ -31,17 +31,12 @@ export const LoginPage = () => {
             loginFailed: false,
             errorText: ''
           });
+          Navigate("/profile");
         } else {
           setState({...state, loginFailed: true, errorText: data.message});
         }
       })
       .catch(error => console.log(`Ошибка: ${error})`));
-  };
-
-  if (localStorage.getItem('refreshToken')) {
-    return (
-      <Navigate to="/" replace/>
-    );
   };
 
   return(

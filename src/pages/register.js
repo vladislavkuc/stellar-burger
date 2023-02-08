@@ -31,6 +31,7 @@ export const RegisterPage = () => {
           setCookie('token', data.accessToken.split('Bearer ')[1], { expires: 1200 });
           localStorage.setItem('refreshToken', data.refreshToken);
           dispatch({type: SET_USER, payload: data.user});
+          Navigate("/profile");
           setState({
             email: '',
             password: '',
@@ -42,13 +43,6 @@ export const RegisterPage = () => {
         }
       })
       .catch(error => console.log(`Ошибка: ${error})`));
-  };
-
-
-  if (localStorage.getItem('refreshToken')) {
-    return (
-      <Navigate to="/" replace/>
-    );
   };
 
 

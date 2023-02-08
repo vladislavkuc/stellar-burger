@@ -3,10 +3,24 @@ import { useDispatch, useSelector } from 'react-redux';
 import { OrderItems } from '../components/order-items/order-items';
 import { WS_CONNECTION_CLOSED, WS_CONNECTION_START, WS_CONNECTION_STOP } from '../redux/actions/wsActions';
 import styles from './feed.module.css';
+import { OrderPage } from './order';
+import Modal from '../components/modal/modal';
+import { CLOSE_MODAL, OPEN_MODAL } from '../redux/actions/modal';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export const FeedPage = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { pathname, state } = useLocation();
+  const { modalIsOpen, modalType } = useSelector(store => store.modal);
   const { orders, total, totalToday } = useSelector(store => store.ws);
+
+  const closeModal = () => {
+    dispatch({
+      type: CLOSE_MODAL,
+    });;
+    navigate('/feed');
+  };
 
   useEffect(() => {
     dispatch({type: WS_CONNECTION_START, wsUrl: 'wss://norma.nomoreparties.space/orders/all'});
@@ -15,6 +29,19 @@ export const FeedPage = () => {
       dispatch({type: WS_CONNECTION_STOP});
     }
   }, []);
+
+  useEffect(() => {
+    if (pathname !== '/feed' && state) {
+      dispatch({
+        type: OPEN_MODAL,
+        modalType: 'orderInfo'
+      })
+    }
+  }, [pathname]);
+
+  if (pathname !== '/feed' && !state) {
+    return <OrderPage isModal={false}/>
+  }
 
   return (
     <div className={styles.wrapper}>
@@ -68,6 +95,11 @@ export const FeedPage = () => {
         <p className='mt-15 text text_type_main-medium'>Выполнено за сегодня:</p>
         <p className={`${styles.shiny} text text_type_digits-large`}>{ totalToday }</p>
       </section>
+      { modalIsOpen && modalType === 'orderInfo' &&
+      <Modal closeModal={closeModal} title=''>
+        <OrderPage isModal={true}/>
+      </Modal>
+      }
     </div>
   )
 };
