@@ -2,7 +2,8 @@ import orderStyles from './order-details.module.css';
 import orderDone from './../../images/done.svg';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { sendOrder } from '../../services/actions/order';
+import { sendOrder } from '../../redux/actions/order';
+import { CLEAR_INGREDIENTS } from '../../redux/actions/burger';
 
 const OrderDetails = () => {
   const { order } = useSelector(store => store.order);
@@ -20,7 +21,8 @@ const OrderDetails = () => {
           ]
         }
       )
-    )
+    );
+    dispatch({type: CLEAR_INGREDIENTS});
   }, []);
 
   return(

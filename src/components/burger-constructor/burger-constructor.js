@@ -3,24 +3,30 @@ import { ConstructorElement, CurrencyIcon, Button } from '@ya.praktikum/react-de
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
 import { useDispatch, useSelector } from 'react-redux';
-import { OPEN_MODAL, CLOSE_MODAL } from '../../services/actions/modal';
+import { OPEN_MODAL, CLOSE_MODAL } from '../../redux/actions/modal';
 import { useDrop } from 'react-dnd';
-import { ADD_INGREDIENT} from '../../services/actions/burger';
-import { INCREASE_BUN, INCREASE_INGREDIENT } from '../../services/actions/menu';
+import { ADD_INGREDIENT} from '../../redux/actions/burger';
+import { INCREASE_BUN, INCREASE_INGREDIENT } from '../../redux/actions/menu';
 import ConstructorIngredient from '../constructor-ingredient/constructor-ingredient';
-import { DELETE_DISPLAYED_INGREDIENT } from '../../services/actions/ingredient';
+import { DELETE_DISPLAYED_INGREDIENT } from '../../redux/actions/ingredient';
+import { useNavigate } from 'react-router-dom';
 
 
 const BurgerConstructor = () => {
   const { modalIsOpen, modalType } = useSelector(store => store.modal);
   const { ingredients, bun } = useSelector(store => store.burger);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleClick = () => {
-    bun.name && dispatch({
-      type: OPEN_MODAL,
-      modalType: 'order'
-    })
+    if (localStorage.getItem('refreshToken')) {
+      bun.name && dispatch({
+        type: OPEN_MODAL,
+        modalType: 'order'
+      });
+    } else {
+      navigate('/login');
+    }
   };
 
   const closeModal = () => {

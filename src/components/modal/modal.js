@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import modalStyles from './modal.module.css';
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import ModalOverlay from '../modal-overlay/modal-overlay';
-import { modalRoot } from './../../utils/constants';
+import { modalRoot } from './../../services/constants';
 import { useEffect } from 'react';
 
 const Modal = (props) => {

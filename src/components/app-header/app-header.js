@@ -1,25 +1,32 @@
-import { useState } from 'react';
-import PropTypes from 'prop-types';
 import headerStyles from './app-header.module.css';
 import {BurgerIcon, ListIcon, ProfileIcon, Logo} from '@ya.praktikum/react-developer-burger-ui-components';
+import { useLocation, Link } from 'react-router-dom';
 
-const AppHeader = (props) => {
-  const [page, setPage] = useState(props.page);
+const AppHeader = () => {
+  const { pathname } = useLocation();
+
+  const checkPath = (path) => {
+    return pathname.split('/').find(word => word === path);
+  };
 
   return(
     <header className={headerStyles.header}>
       <div className={`pt-6 pb-6 ${headerStyles['header-content']}`}>
         <nav>
           <ul className={headerStyles.list}>
-            <li className={`pl-5 pr-5 pb-4 pt-4 ${headerStyles['list-item']}`} onClick={() => setPage('constructor')}>
-              <BurgerIcon type={page === 'constructor' ? 'primary' : 'secondary'}/>
-              <p
-                className={`text text_type_main-default ml-2 ${page === 'constructor' ? '' : 'text_color_inactive'}`}
-              >Конструктор</p>
+            <li className={`pl-5 pr-5 pb-4 pt-4 ${headerStyles['list-item']}`}>
+              <Link to="/" className={headerStyles.link}>
+                <BurgerIcon type={pathname === '/' || checkPath('ingredients') ? 'primary' : 'secondary'}/>
+                <p
+                  className={`text text_type_main-default ml-2 ${pathname === '/' || checkPath('ingredients') ? '' : 'text_color_inactive'}`}
+                >Конструктор</p>
+              </Link>
             </li>
-            <li className={`pl-5 pr-5 pb-4 pt-4 ml-2 ${headerStyles['list-item']}`} onClick={() => setPage('list')}>
-              <ListIcon type={page === 'list' ? 'primary' : 'secondary'}/>
-              <p className={`text text_type_main-default ml-2 ${page === 'list' ? '' : 'text_color_inactive'}`}>Лента заказов</p>
+            <li className={`pl-5 pr-5 pb-4 pt-4 ml-2 ${headerStyles['list-item']}`}>
+              <Link to="/feed" className={headerStyles.link}>
+                <ListIcon type={checkPath('feed') ? 'primary' : 'secondary'}/>
+                <p className={`text text_type_main-default ml-2 ${checkPath('feed') ? '' : 'text_color_inactive'}`}>Лента заказов</p>
+              </Link>
             </li>
           </ul>
         </nav>
@@ -28,17 +35,13 @@ const AppHeader = (props) => {
           <Logo />
         </div>
 
-        <div className={`pl-5 pr-5 pb-4 pt-4 ${headerStyles['list-item']}`} onClick={() => setPage('cabinet')}>
-          <ProfileIcon type={page === 'cabinet' ? 'primary' : 'secondary'}/>
-          <p className={`text text_type_main-default ml-2 ${page === 'cabinet' ? '' : 'text_color_inactive'}`}>Личный кабинет</p>
-        </div>
+        <Link to="/profile" className={`pl-5 pr-5 pb-4 pt-4 ${headerStyles['list-item']}`}>
+            <ProfileIcon type={checkPath('profile') ? 'primary' : 'secondary'}/>
+            <p className={`text text_type_main-default ml-2 ${checkPath('profile') ? '' : 'text_color_inactive'}`}>Личный кабинет</p>
+        </Link>
       </div>
     </header>
   )
 }
-
-AppHeader.propTypes = {
-  page: PropTypes.string
-};
 
 export default AppHeader;
