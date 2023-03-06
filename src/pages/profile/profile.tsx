@@ -94,7 +94,7 @@ export const ProfilePage: FC = (): ReactElement => {
         dispatch({type: WS_CONNECTION_STOP});
       }
     }
-  });
+  }, []);
 
 
   useEffect(() => {

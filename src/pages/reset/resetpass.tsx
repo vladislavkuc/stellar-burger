@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { FC, FormEvent, ReactElement } from 'react';
 import styles from './resetpass.module.css';
 import { Input, Button, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import { sendResetPasswordResquest } from '../../services/api';
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 
-export const ResetPage = () => {
+export const ResetPage: FC = (): ReactElement => {
   const navigate = useNavigate();
   const location = useLocation();
   const [state, setState] = React.useState({
@@ -13,12 +13,8 @@ export const ResetPage = () => {
     error: ''
   });
 
-  const tokenRef = React.useRef(null);
-  const onIconClick = (ref) => {
-    setTimeout(() => ref.current.focus(), 0);
-  };
-
-  const handleReset = () => {
+  const handleReset = (e: FormEvent) => {
+    e.preventDefault();
     sendResetPasswordResquest(state)
       .then(data => {
         if (data.success) {
@@ -71,8 +67,6 @@ export const ResetPage = () => {
         value={state.token}
         name={'token'}
         error={state.error !== ''}
-        ref={tokenRef}
-        onIconClick={() => onIconClick(tokenRef)}
         errorText={state.error}
         size={'default'}
         extraClass="mb-6"

@@ -32,7 +32,7 @@ export const LoginPage: FC = (): ReactElement => {
             loginFailed: false,
             errorText: ''
           });
-          navigate("/profile");
+          navigate("/");
         } else {
           setState({...state, loginFailed: true, errorText: data.message});
         }

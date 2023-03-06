@@ -1,8 +1,7 @@
 import { FC, ReactElement, useEffect } from 'react';
 import orderStyles from './order-details.module.css';
 import orderDone from './../../images/done.svg';
-import { useDispatch } from 'react-redux';
-import { useSelector } from '../../redux/hooks';
+import { useDispatch, useSelector } from '../../redux/hooks';
 import { sendOrder } from '../../redux/actions/order';
 import { CLEAR_INGREDIENTS } from '../../redux/constants/burger';
 
@@ -13,10 +12,10 @@ const OrderDetails: FC = (): ReactElement => {
 
   useEffect(() => {
     if (bun._id !== ''){
-      sendOrder({ ingredients: [ bun._id, ...ingredients.map(ing => ing._id), bun._id,]});
+      dispatch(sendOrder({ ingredients: [ bun._id, ...ingredients.map(ing => ing._id), bun._id,]}));
+      dispatch({ type: CLEAR_INGREDIENTS });
     }
-    dispatch({ type: CLEAR_INGREDIENTS });
-  }, []);
+  }, [bun]);
 
   return(
     <div className={orderStyles.order}>

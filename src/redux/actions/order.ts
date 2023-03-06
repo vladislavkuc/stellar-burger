@@ -31,13 +31,13 @@ export const sendOrderSuccess = (order: TOrder): TSendOrderSuccess => ({
 });
 
 export const sendOrder: AppThunk = (orderData: TOrderPayload) => (dispatch: AppDispatch) => {
-    dispatch({ type: SEND_ORDER_REQUEST });
-    sendOrderRequest(orderData).then(res => {
-      if (res && res.success) {
-        dispatch(sendOrderSuccess(res.order));
-      } else {
-        dispatch({ type: SEND_ORDER_FAILED });
-      }
-    })
-    .catch((errorText: string) => console.log(`Ошибка: ${errorText}`));
-  };
+  dispatch({ type: SEND_ORDER_REQUEST });
+  sendOrderRequest(orderData).then(res => {
+    if (res && res.success) {
+      dispatch(sendOrderSuccess(res.order));
+    } else {
+      dispatch({ type: SEND_ORDER_FAILED });
+    }
+  })
+  .catch((errorText: string) => console.log(`Ошибка: ${errorText}`));
+};

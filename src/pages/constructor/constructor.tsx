@@ -5,16 +5,16 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import styles from './constructor.module.css';
 import { getIngredientsByRequest } from '../../redux/actions/menu';
-import { useDispatch } from 'react-redux';
 import { useLocation, useParams } from 'react-router-dom';
 import IngridientDetails from '../../components/ingridient-details/ingridient-details';
 import { openModal } from '../../redux/actions/modal';
 import { getIngredientsRequest } from '../../services/api';
 import { TIngredient } from '../../services/types';
 import { setDisplayedIngredient } from '../../redux/actions/ingredient';
+import { useDispatch } from '../../redux/hooks';
 
 export const ConstructorPage: FC = (): ReactElement => {
-  const dispatch: any = useDispatch();
+  const dispatch = useDispatch();
   const { state, pathname } = useLocation();
   const { id } = useParams();
 

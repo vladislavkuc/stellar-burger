@@ -9,7 +9,6 @@ type Props = {
 };
 
 export const ProtectedRouteElement: FC<Props> = ({ element, isProtected }): ReactElement => {
-  console.log('Дело вот в чем...')
   const [ auth, setAuth ] = useState(isProtected);
 
   useEffect(() => {
