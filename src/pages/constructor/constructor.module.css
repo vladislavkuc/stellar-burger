@@ -1,0 +1,14 @@
+.constructor {
+  display: flex;
+  justify-content: space-between;
+  max-width: 1240px;
+  width: 100%;
+}
+
+.ingredient {
+  padding: 120px 0 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

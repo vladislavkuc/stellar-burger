@@ -1,0 +1,23 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 180px 0 0;
+}
+
+.link {
+  font-weight: 900;
+  display: flex;
+  flex-direction: row;
+}
+
+.path {
+  text-decoration: none;
+  color: #4C4CFF;
+}
+
+.path:hover {
+  color: #2e2ea1;
+}
